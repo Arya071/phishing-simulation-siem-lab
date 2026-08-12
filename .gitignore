@@ -1,0 +1,76 @@
+# ==============================
+# OS / Editor files
+# ==============================
+
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+
+# ==============================
+# Secrets / Credentials
+# ==============================
+
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+
+credentials/
+secrets/
+private/
+
+
+# ==============================
+# GoPhish local/runtime data
+# ==============================
+
+*.db
+*.sqlite
+*.sqlite3
+
+gophish.db
+
+
+# ==============================
+# Logs / Runtime files
+# ==============================
+
+*.log
+logs/
+
+tmp/
+temp/
+
+
+# ==============================
+# Python
+# ==============================
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+
+# ==============================
+# Wazuh / local lab artifacts
+# ==============================
+
+wazuh-agent*.deb
+wazuh-agent*.rpm
+
+
+# ==============================
+# Personal / local test data
+# ==============================
+
+local/
+private-data/
