@@ -1,439 +1,164 @@
 # Phishing Simulation & SIEM Detection Lab
 
-An authorized cybersecurity home lab combining phishing simulation, email sandboxing, security telemetry, and SIEM-based detection using GoPhish, Mailtrap, and Wazuh.
+An authorized cybersecurity home lab combining controlled phishing simulation, email sandboxing, endpoint telemetry, and SIEM detection using GoPhish, Mailtrap, and Wazuh.
 
-The project demonstrates an end-to-end security workflow:
+**GoPhish → Mailtrap → Controlled Test User → GoPhish Log → Wazuh Agent → Decoder → Detection Rules → Alert → Analysis**
 
-**GoPhish → Mailtrap → Controlled Test User → Simulation Event → Wazuh → Alert → Analysis**
+## Current Result
 
----
+SIM-001, a fictional NexaCore recruitment scenario, has been validated end to end. A controlled link interaction produced GoPhish telemetry that was collected from `C:\GoPhish\gophish.log`, decoded by Wazuh, classified by Rule `100010`, escalated by Rule `100012` to Level 8, and mapped to MITRE ATT&CK `T1566.002 — Spearphishing Link`.
+
+> The single-user campaign metrics are technical validation results, not a statistical phishing-susceptibility measurement.
 
 ## Objectives
 
 - Build realistic phishing-awareness simulations in a controlled environment.
-- Validate email delivery and campaign tracking using GoPhish.
-- Use Mailtrap as a safe email sandbox.
-- Measure controlled interactions such as email delivery, opens, and clicks.
-- Forward phishing-simulation telemetry into Wazuh.
-- Develop and validate security monitoring and detection logic.
-- Analyze social-engineering techniques and defensive controls.
-- Document the complete workflow as a cybersecurity portfolio project.
-
----
+- Validate safe email delivery and tracking through GoPhish and Mailtrap.
+- Collect GoPhish telemetry with a Windows Wazuh agent.
+- Parse application logs with custom Wazuh decoders.
+- Develop and validate chained SIEM detection rules.
+- Map detections to MITRE ATT&CK.
+- Investigate alerts and document limitations and false-positive considerations.
+- Present the workflow as a reproducible cybersecurity portfolio project.
 
 ## Architecture
 
 ```text
-                         SIMULATION LAYER
-                                │
-                                ▼
-                         ┌─────────────┐
-                         │   GoPhish   │
-                         │             │
-                         │  Campaign   │
-                         │  Tracking   │
-                         │  Landing    │
-                         │    Page     │
-                         └──────┬──────┘
-                                │
-                         Simulated Email
-                                │
-                                ▼
-                         ┌─────────────┐
-                         │  Mailtrap   │
-                         │    Email    │
-                         │   Sandbox   │
-                         └──────┬──────┘
-                                │
-                        Controlled Recipient
-                                │
-                         Open / Click Event
-                                │
-                                ▼
-                         GoPhish Telemetry
-                                │
-                                ▼
-                         ┌─────────────┐
-                         │    Wazuh    │
-                         │     SIEM    │
-                         │             │
-                         │  Ingestion  │
-                         │  Detection  │
-                         │   Alerting  │
-                         └──────┬──────┘
-                                │
-                                ▼
-                         Security Analysis
+GoPhish
+   |
+   +--> Mailtrap --> Controlled Test User
+   |                    |
+   |                    v
+   |              Simulated Interaction
+   |                    |
+   v                    v
+C:\GoPhish\gophish.log
+   |
+   v
+Windows Wazuh Agent
+   |
+   v
+Wazuh Manager
+   |
+   v
+gophish / gophish-detail decoders
+   |
+   v
+Rule 100010 — Level 3
+   |
+   v
+Rule 100012 — Level 8
+   |
+   v
+MITRE T1566.002
+   |
+   v
+Alert Investigation
 ```
-
----
 
 ## Technologies
 
 - Kali Linux
 - GoPhish
 - Mailtrap
-- Wazuh
+- Wazuh 4.14.7
+- Docker
+- Windows Wazuh Agent
 - HTML/CSS
-- Python
 - Git/GitHub
 - MITRE ATT&CK
 
----
-
-## Project Structure
+## Repository Structure
 
 ```text
-phishing-simulation-lab/
-│
+phishing-simulation-siem-lab/
 ├── analysis/
-│
-├── campaigns/
-│   ├── recruitment/
-│   │   └── scenario.md
-│   │
-│   ├── security-notification/
-│   │   └── scenario.md
-│   │
-│   └── document-sharing/
-│       └── scenario.md
-│
-├── docs/
-│   ├── brand.md
-│   ├── campaign-plan.md
-│   ├── campaign-profile.md
-│   ├── scope.md
-│   └── test-users.md
-│
-├── landing-pages/
-│   └── sim-001-recruitment/
-│       └── index.html
-│
-├── screenshots/
-│
-├── templates/
-│   ├── base/
-│   │   ├── preview.html
-│   │   └── style.css
-│   │
-│   └── sim-001-recruitment/
-│       └── email.html
-│
-├── .gitignore
-└── README.md
+│   └── sim-001/              # End-to-end detection case study
+├── campaigns/                # Scenario design
+├── docs/                     # Scope, brand, plan, controlled users
+├── landing-pages/            # Simulation landing pages
+├── screenshots/              # Sanitized evidence
+├── templates/                # Email/template assets
+└── wazuh/
+    ├── alerts/               # Alert evidence and interpretation
+    ├── architecture/         # Integration/data flow
+    ├── dashboards/           # Dashboard status and future views
+    ├── decoders/             # GoPhish parsing logic
+    └── rules/                # Custom detection logic
 ```
 
----
-
-# Simulation Scenarios
+## Simulation Scenarios
 
 | ID | Scenario | Status |
 |---|---|---|
-| SIM-001 | Internship / Recruitment | Validated |
+| SIM-001 | Internship / Recruitment | Validated with Wazuh |
 | SIM-002 | IT Security Notification | Planned |
 | SIM-003 | Document Sharing | Planned |
 
----
+## SIM-001 — Recruitment Simulation
 
-# SIM-001 — Recruitment Simulation
+SIM-001 uses a fictional technology internship opportunity from **NexaCore Technologies**. The message and landing page were designed for an authorized lab and delivered only to controlled test infrastructure.
 
-SIM-001 is a controlled phishing-awareness simulation based on a fictional technology internship opportunity from **NexaCore Technologies**.
-
-The scenario was designed to reproduce common social-engineering characteristics found in recruitment-themed phishing messages while remaining entirely within the authorized lab environment.
-
-### Social-Engineering Theme
-
-The scenario uses:
-
-- Career opportunity
-- Curiosity
-- Professional branding
-- Internship relevance
-- Call-to-action urgency
-
-The simulated email contains a tracked **Review Opportunity** button that directs the controlled test recipient to a simulated recruitment landing page.
-
----
-
-## SIM-001 Email
-
-The email was developed as a modern enterprise-style HTML message.
-
-It includes:
-
-- NexaCore branding
-- Technology/early-career theme
-- Internship opportunity details
-- Location and work-arrangement information
-- Personalized recipient greeting
-- GoPhish URL tracking
-- Responsive HTML/CSS design
-- Plain-text fallback
-
-GoPhish variables used by the template include:
-
-```text
-{{.FirstName}}
-```
-
-for personalization and:
-
-```text
-{{.URL}}
-```
-
-for campaign URL tracking.
-
----
-
-## SIM-001 Landing Page
-
-The landing page mirrors the visual language of the simulated email and presents a fictional Software Engineering Internship opportunity.
-
-After the simulated interaction, the page provides a:
-
-**Security Awareness Simulation**
-
-disclosure explaining the purpose of the exercise.
-
-The landing page does **not** collect:
-
-- Passwords
-- Authentication tokens
-- MFA codes
-- Session credentials
-- Other sensitive authentication information
-
-Data capture is intentionally disabled.
-
----
-
-# Technical Validation
-
-SIM-001 was first executed as a controlled technical validation test using a single authorized test recipient.
-
-The resulting GoPhish campaign metrics were:
+### GoPhish Validation
 
 | Event | Result |
 |---|---:|
-| Email Sent | 1 |
-| Email Opened | 1 |
-| Link Clicked | 1 |
-| Data Submitted | 0 |
-| Email Reported | 0 |
+| Email sent | 1 |
+| Email opened | 1 |
+| Link clicked | 1 |
+| Data submitted | 0 |
+| Email reported | 0 |
 
-### Interpretation
+The operator performed the interaction to validate delivery, tracking, the landing page, telemetry generation, and SIEM detection. These values must not be represented as a real-world user susceptibility rate.
 
-These results demonstrate that the technical simulation workflow successfully operated end-to-end.
+### Wazuh Detection
 
-The results **must not be interpreted as a 100% phishing-susceptibility rate**, because the test interaction was performed by the lab operator.
-
-The purpose of this run was to validate:
-
-```text
-Email Delivery
-      ↓
-Open Tracking
-      ↓
-URL Tracking
-      ↓
-Landing Page
-      ↓
-Security Awareness Disclosure
-```
-
----
-
-# Wazuh Integration
-
-Following the successful GoPhish validation, SIM-001 telemetry was integrated with the Wazuh home lab.
-
-The objective is to move beyond simply observing campaign statistics inside GoPhish and demonstrate how phishing-simulation activity can become observable security telemetry within a SIEM.
-
-Current workflow:
-
-```text
-GoPhish Event
-      │
-      ▼
-Telemetry
-      │
-      ▼
-Wazuh Manager
-      │
-      ▼
-Detection Logic
-      │
-      ▼
-Wazuh Alert
-      │
-      ▼
-Security Analysis
-```
-
-SIM-001 has successfully generated an event that was logged by the Wazuh manager.
-
-Further documentation of the Wazuh integration, event structure, decoders, rules, and alerts will be maintained as the defensive phase of the project develops.
-
----
-
-# Detection Engineering
-
-The defensive portion of the project focuses on transforming phishing-simulation activity into useful security telemetry.
-
-Areas of investigation include:
-
-- Event ingestion
-- Log normalization
-- Wazuh decoders
-- Custom detection rules
-- Alert severity
-- Event correlation
-- Phishing interaction detection
-- Investigation workflows
-- Detection limitations
-- Security-awareness recommendations
-
-The goal is to demonstrate the complete path from simulated activity to SIEM detection.
-
----
-
-# Security Analysis
-
-Each phishing scenario is analyzed from both offensive and defensive perspectives.
-
-### Offensive Perspective
-
-The simulation examines social-engineering characteristics such as:
-
-- Authority
-- Urgency
-- Curiosity
-- Career motivation
-- Familiar branding
-- Call-to-action design
-
-### Defensive Perspective
-
-The project examines controls such as:
-
-- Sender verification
-- URL inspection
-- Independent verification of opportunities
-- Email security monitoring
-- SIEM telemetry
-- Detection rules
-- Security-awareness training
-- Incident investigation
-
----
-
-# Metrics
-
-The project tracks technical campaign metrics including:
-
-- Emails sent
-- Delivery status
-- Email opens
-- Link clicks
-- Reported messages
-- Landing-page interactions
-- Wazuh alerts
-- Detection severity
-- Detection latency
-
-For controlled single-user validation runs, these metrics are used to verify system functionality rather than to make statistical claims about human phishing susceptibility.
-
----
-
-# Security Controls & Scope
-
-This project is an authorized cybersecurity laboratory.
-
-The following restrictions apply:
-
-- Only explicitly authorized test accounts are used.
-- Mailtrap is used as the email sandbox.
-- No real passwords are collected.
-- No authentication tokens are collected.
-- No MFA codes are collected.
-- No credential-harvesting forms are used.
-- No real corporate infrastructure is targeted.
-- Fictional organization names are used.
-- Test identities are sanitized for public documentation.
-- Campaign results are not presented as real-world susceptibility data.
-
----
-
-# MITRE ATT&CK Mapping
-
-The project can be mapped to relevant MITRE ATT&CK techniques associated with phishing and social engineering.
-
-Potential mappings include:
-
-| Technique | Description |
+| Stage | Implementation |
 |---|---|
-| T1566 | Phishing |
-| T1566.002 | Phishing: Spearphishing Link |
+| Source log | `C:\GoPhish\gophish.log` |
+| Parent decoder | `gophish` |
+| Child decoder | `gophish-detail` |
+| Baseline rule | `100010`, Level 3 — Gophish Event Logged |
+| Detection rule | `100012`, Level 8 |
+| Detection condition | `GET /?rid=` after Rule `100010` |
+| ATT&CK mapping | `T1566.002 — Spearphishing Link` |
+| Tactic observed | Initial Access |
 
-Mappings are used for analytical and educational purposes and are applied to the simulated scenarios rather than real-world attacks.
+The detailed implementation, evidence interpretation, rule semantics, and limitations are documented in [`analysis/sim-001/README.md`](analysis/sim-001/README.md).
 
----
+## Detection Engineering
 
-# Lessons Learned
+The defensive portion deliberately separates parsing from detection. The `gophish` decoder identifies application telemetry, `gophish-detail` extracts fields, Rule `100010` establishes a baseline GoPhish event, and Rule `100012` uses the parent-rule relationship plus the tracked-link request pattern to generate the higher-severity simulation alert.
 
-The project demonstrates the lifecycle of a controlled phishing simulation:
+See:
 
-```text
-Scenario Design
-      ↓
-Social-Engineering Analysis
-      ↓
-Email Template Development
-      ↓
-Controlled Email Delivery
-      ↓
-Campaign Tracking
-      ↓
-Landing-Page Interaction
-      ↓
-Telemetry Generation
-      ↓
-SIEM Ingestion
-      ↓
-Detection Engineering
-      ↓
-Security Analysis
-```
+- [`wazuh/architecture/`](wazuh/architecture/)
+- [`wazuh/decoders/`](wazuh/decoders/)
+- [`wazuh/rules/`](wazuh/rules/)
+- [`wazuh/alerts/sim-001/`](wazuh/alerts/sim-001/)
 
-The project also demonstrates an important distinction between **offensive simulation** and **defensive validation**.
+## Security Controls & Scope
 
-A successful simulated click during a controlled technical test does not by itself demonstrate user susceptibility. Meaningful susceptibility studies require an appropriately designed participant study with authorization, methodology, and sufficient sample size.
+This repository documents an authorized security-awareness laboratory. Only controlled test accounts and sandboxed email delivery are used. The project does not collect real passwords, authentication tokens, MFA codes, or session credentials, and it does not target real organizations or unauthorized individuals.
 
----
+Before screenshots or logs are made public, they should be reviewed for credentials, tokens, account/API identifiers, personal email addresses, unnecessary IP addresses, and private host information.
 
-# Future Work
+## Detection Limitations
 
-Planned improvements include:
+Rule `100012` is specific to this GoPhish simulation workflow. A Level-8 alert means the configured telemetry matched the lab detection condition; it does not independently prove credential compromise, malware execution, persistence, endpoint compromise, or an external threat actor.
 
-- Complete SIM-002 security-notification scenario.
-- Complete SIM-003 document-sharing scenario.
-- Expand Wazuh detection rules.
-- Improve event correlation.
-- Build phishing-simulation dashboards.
-- Compare telemetry across multiple scenarios.
-- Measure detection latency.
-- Document false positives and detection limitations.
-- Develop a repeatable detection-engineering methodology.
-- Create a final incident-investigation workflow.
-- Produce a consolidated security assessment report.
+A production adaptation would require broader testing for repeated requests, browser refreshes, automated URL scanners, malformed events, legitimate administrative activity, and other potential false-positive conditions.
 
----
+## Future Work
 
-# Disclaimer
+- Sanitize and add the final SIM-001 Wazuh evidence set.
+- Validate SIM-002 and SIM-003.
+- Extend scenario-specific detection logic.
+- Add repeatable decoder/rule testing.
+- Build multi-scenario Wazuh visualizations.
+- Measure detection latency only where timestamps permit a defensible calculation.
+- Document investigation playbooks and tuning decisions.
 
-This project is an authorized cybersecurity laboratory created for education, security-awareness research, detection engineering, and portfolio development.
+## Disclaimer
 
-All phishing activity is restricted to controlled test infrastructure and explicitly authorized test accounts.
-
-No real credentials are collected and no unauthorized systems or individuals are targeted.
+This project is an authorized cybersecurity laboratory created for education, security-awareness research, detection engineering, and portfolio development. All phishing activity is restricted to controlled test infrastructure and explicitly authorized test accounts.
