@@ -100,14 +100,15 @@ The validated SIM-001 alert used Rule `100012`, Level 8, decoder `gophish`, and 
 
 ## 10. Evidence capture
 
-Capture only the minimum evidence needed to demonstrate the detection chain:
+The final SIM-001 evidence set contains five sanitized screenshots:
 
-1. Events view showing the alert.
-2. Rule `100012` details.
-3. Alert document details.
-4. Filtered Rule `100012` view.
-5. Rule `100010` details.
-6. Custom decoder/rule definitions.
+1. `01-event-detection.png` — Wazuh Events view showing the SIM-001 alert.
+2. `02-rule-details.png` — Rule `100012` configuration and ATT&CK mapping.
+3. `03-alert-document-details.png` — underlying alert fields, decoder, log source, severity, and MITRE metadata.
+4. `04-dashboard-alert.png` — Wazuh dashboard representation of the alert.
+5. `05-events-filtered.png` — Events view filtered to `rule.id: 100012`.
+
+The decoder and Rule `100010` are documented as configuration evidence in the repository rather than as separate screenshots.
 
 Before committing screenshots, sanitize API identifiers, personal email addresses, unnecessary internal IP addresses, credentials, tokens, and private host information.
 
