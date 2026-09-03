@@ -56,6 +56,29 @@ MITRE T1566.002
 Alert Investigation
 ```
 
+
+## Phase 1: Cloud Wazuh Expansion
+
+The repository now includes a second defensive monitoring workstream that extends the lab beyond the original GoPhish integration. A Wazuh deployment was hosted on an **OVHcloud VPS**, with local Ubuntu and Windows endpoints connected for centralized monitoring.
+
+### Confirmed Status
+
+- OVHcloud-hosted Wazuh Manager, Indexer, and Dashboard operational.
+- Ubuntu endpoint connected and reported **Active**.
+- Windows endpoint connected and reported **Active**.
+- Ubuntu authentication and privileged activity validated as centralized telemetry.
+- Advanced Windows behavior validation remains evidence-pending and is **not yet claimed as completed**.
+
+Documentation:
+
+- [Cloud Wazuh deployment](docs/cloud-wazuh-deployment.md)
+- [Ubuntu endpoint validation](docs/ubuntu-endpoint-validation.md)
+- [Windows endpoint validation](docs/windows-endpoint-validation.md)
+- [Troubleshooting record](docs/wazuh-cloud-troubleshooting.md)
+- [Phase 1 status](docs/phase1-status.md)
+- [Incident investigation template](analysis/incident-investigation-template.md)
+- [Incident timeline template](analysis/incident-timeline-template.md)
+
 ## Technologies
 
 - Kali Linux
