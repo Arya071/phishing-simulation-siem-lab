@@ -23,6 +23,15 @@
 - [x] Agent shown as Active on the manager
 - [x] Windows telemetry observed centrally
 
+### Custom Detection Engineering
+- [x] New local Wazuh rule created with ID **100100**
+- [x] Custom rule validated with the Wazuh rule-testing workflow
+- [x] Alert evidence captured
+- [x] Wazuh Manager operational status captured
+- [x] Validation screenshots added to the repository
+
+See: [Custom Wazuh SSH Detection Rule](custom-wazuh-ssh-rule.md)
+
 ## Pending Evidence-Based Work
 
 - [ ] Controlled Windows activity validation
@@ -30,7 +39,6 @@
 - [ ] Select investigation case(s)
 - [ ] Populate analyst investigation
 - [ ] Create final incident timeline
-- [ ] Add final sanitized screenshots
 - [ ] Final repository review and merge
 
 ## Project Principle
@@ -42,4 +50,3 @@ The repository distinguishes between:
 - **Evidence pending**
 
 This is intentional. The project should remain defensible during technical interviews.
-
